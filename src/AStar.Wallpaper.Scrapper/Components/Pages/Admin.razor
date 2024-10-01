@@ -1,0 +1,72 @@
+﻿@page "/admin"
+@rendermode InteractiveServer
+
+<PageTitle>Admin</PageTitle>
+
+<h1>Admin</h1>
+
+<EditForm Model="@ScrapeConfiguration" OnSubmit="@HandleValidSubmit">
+
+    <div class="container mt-5">
+        <table class="table table-striped">
+            <tbody>
+                <tr>
+                    <td colspan="2"><h2>User Configuration</h2></td>
+                </tr>
+                <tr>
+                    <th class="col-2"><label for="Username">Username: </label></th>
+                    <td class="col-5"><InputText id="Username" @bind-Value="@ScrapeConfiguration.UserConfiguration.Username"></InputText></td>
+                </tr>
+                <tr>
+                    <th class="col-2"><label for="Password">Password: </label></th>
+                    <td class="col-5"><InputText id="Password" @bind-Value="@ScrapeConfiguration.UserConfiguration.Password"></InputText></td>
+                </tr>
+                <tr>
+                    <th class="col-2"><label for="LoginEmailAddress">Email Address: </label></th>
+                    <td class="col-5"><InputText id="LoginEmailAddress" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.UserConfiguration.LoginEmailAddress"></InputText></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><h2>Search Configuration</h2></td>
+                </tr>
+                <tr>
+                    <th class="col-2"><label for="BaseUrl">Base Url: </label></th>
+                    <td class="col-5"><InputText id="BaseUrl" @bind-Value="@ScrapeConfiguration.SearchConfiguration.BaseUrl"></InputText></td>
+                </tr>
+                <tr>
+                    <th class="col-2"><label for="LoginUrl">Login Url: </label></th>
+                    <td class="col-5"><InputText id="LoginUrl" @bind-Value="@ScrapeConfiguration.SearchConfiguration.LoginUrl"></InputText></td>
+                </tr>
+                <tr>
+                    <th class="col-2"><label for="SearchString">Search String: </label></th>
+                    <td class="col-5"><InputText id="SearchString" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.SearchConfiguration.SearchString"></InputText></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><h2>Scrape Directories</h2></td>
+                </tr>
+                <tr>
+                    <th class="col-2"><label for="RootDirectory">Root Directory: </label></th>
+                    <td class="col-5"><InputText id="RootDirectory" @bind-Value="@ScrapeConfiguration.ScrapeDirectories.RootDirectory"></InputText></td>
+                </tr>
+                <tr>
+                    <th class="col-2"><label for="BaseSaveDirectory">Base Save Directory: </label></th>
+                    <td class="col-5"><InputText id="BaseSaveDirectory" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.ScrapeDirectories.BaseSaveDirectory"></InputText></td>
+                </tr>
+                <tr>
+                    <th class="col-2"><label for="BaseDirectory">Base Directory: </label></th>
+                    <td class="col-5"><InputText id="BaseDirectory" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.ScrapeDirectories.BaseDirectory"></InputText></td>
+                </tr>
+                <tr>
+                    <th class="col-2"><label for="BaseDirectoryFamous">Base Directory Famous: </label></th>
+                    <td class="col-5"><InputText id="BaseDirectoryFamous" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.ScrapeDirectories.BaseDirectoryFamous"></InputText></td>
+                </tr>
+                <tr>
+                    <th class="col-2"><label for="SubDirectoryName">Sub-Directory Name: </label></th>
+                    <td class="col-5"><InputText id="SubDirectoryName" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.ScrapeDirectories.SubDirectoryName"></InputText></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" @onclick="@HandleValidSubmit">Update</button>
+    </div>
+</EditForm>

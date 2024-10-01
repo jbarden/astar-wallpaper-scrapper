@@ -1,6 +1,10 @@
+using AStar.ASPNet.Extensions.ServiceCollectionExtensions;
+using AStar.Infrastructure.Data;
+using AStar.Logging.Extensions;
 using AStar.Wallpaper.Scrapper.Components;
 
 namespace AStar.Wallpaper.Scrapper;
+
 public class Program
 {
     public static void Main(string[] args)
@@ -8,25 +12,20 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services.AddRazorComponents()
+        _ = builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
+        _ = builder.CreateBootstrapLogger("astar-logging-settings.json")
+                   .AddLogging("astar-logging-settings.json");
+        _ = builder.Services.AddScoped(_ => new FilesContext(new() { Value = builder.Configuration.GetConnectionString("SqlServer")! }, new() { EnableLogging = false, IncludeSensitiveData = false, InMemory = false }));
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
-        if(!app.Environment.IsDevelopment())
-        {
-            app.UseExceptionHandler("/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            app.UseHsts();
-        }
+        _ = app.UseHttpsRedirection();
 
-        app.UseHttpsRedirection();
+        _ = app.UseStaticFiles();
+        _ = app.UseAntiforgery();
 
-        app.UseStaticFiles();
-        app.UseAntiforgery();
-
-        app.MapRazorComponents<App>()
+        _ = app.MapRazorComponents<App>()
             .AddInteractiveServerRenderMode();
 
         app.Run();
