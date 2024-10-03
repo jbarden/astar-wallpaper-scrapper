@@ -12,17 +12,23 @@ public partial class Categories
     [Inject]
     public required FilesContext Context { get; set; }
 
-    private bool Loading { get; set; } = true;
+    private string UpdateMessage { get; set; } = string.Empty;
 
-    private void HandleValidSubmit() => Context.SaveChanges();
+    private async Task HandleValidSubmit()
+    {
+        _ = Context.SaveChanges();
+        UpdateMessage = "The Categories have been updated";
+        await Task.Delay(2000);
+        UpdateMessage = string.Empty;
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        // Simulate asynchronous loading to demonstrate streaming rendering
-        await Task.Delay(500);
-
-        var scrapeConfiguration =  Context.ScrapeConfiguration.Include(scrapeConfiguration => scrapeConfiguration.UserConfiguration)
-            .Include(scrapeConfiguration => scrapeConfiguration.SearchConfiguration).Include(c => c.SearchConfiguration.SearchCategories).First();
+        var scrapeConfiguration = await Context.ScrapeConfiguration
+                                                .Include(scrapeConfiguration => scrapeConfiguration.UserConfiguration)
+                                                .Include(scrapeConfiguration => scrapeConfiguration.SearchConfiguration)
+                                                .Include(c => c.SearchConfiguration.SearchCategories)
+                                                .SingleAsync();
 
         CategoriesList = [.. scrapeConfiguration.SearchConfiguration.SearchCategories.OrderBy(sc=>sc.Order)];
     }

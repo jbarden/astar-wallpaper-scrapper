@@ -8,14 +8,14 @@ namespace AStar.Wallpaper.Scrapper.Components.Pages;
 
 public partial class Admin
 {
-    private ScrapeConfiguration ScrapeConfiguration { get; set; } = new();
-
     [Inject]
-    public required FilesContext Context { get;set; }
+    public required FilesContext Context { get; set; }
 
     public bool Loading { get; private set; }
-    
-    private void HandleValidSubmit() => Context.SaveChanges();
+
+    private ScrapeConfiguration ScrapeConfiguration { get; set; } = new();
+
+    private string UpdateMessage { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -27,9 +27,11 @@ public partial class Admin
         try
         {
             Loading = true;
-            ScrapeConfiguration = await Context.ScrapeConfiguration.Include(scrapeConfiguration => scrapeConfiguration.UserConfiguration)
-                .Include(scrapeConfiguration => scrapeConfiguration.SearchConfiguration)
-                .Include(scrapeConfiguration => scrapeConfiguration.ScrapeDirectories).SingleAsync();
+            ScrapeConfiguration = await Context.ScrapeConfiguration
+                                                .Include(scrapeConfiguration => scrapeConfiguration.UserConfiguration)
+                                                .Include(scrapeConfiguration => scrapeConfiguration.SearchConfiguration)
+                                                .Include(scrapeConfiguration => scrapeConfiguration.ScrapeDirectories)
+                                                .SingleAsync();
         }
         finally
         {
@@ -37,5 +39,13 @@ public partial class Admin
         }
 
         await base.OnInitializedAsync();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        _ = Context.SaveChanges();
+        UpdateMessage = "Admin settings have been updated";
+        await Task.Delay(2000);
+        UpdateMessage = string.Empty;
     }
 }
