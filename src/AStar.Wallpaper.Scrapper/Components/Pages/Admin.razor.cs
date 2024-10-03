@@ -11,34 +11,21 @@ public partial class Admin
     [Inject]
     public required FilesContext Context { get; set; }
 
-    public bool Loading { get; private set; }
-
-    private ScrapeConfiguration ScrapeConfiguration { get; set; } = new();
+    private ScrapeConfiguration? ScrapeConfiguration { get; set; }
 
     private string UpdateMessage { get; set; } = string.Empty;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if(Loading)
+        if(firstRender)
         {
-            return;
-        }
-
-        try
-        {
-            Loading = true;
             ScrapeConfiguration = await Context.ScrapeConfiguration
                                                 .Include(scrapeConfiguration => scrapeConfiguration.UserConfiguration)
                                                 .Include(scrapeConfiguration => scrapeConfiguration.SearchConfiguration)
                                                 .Include(scrapeConfiguration => scrapeConfiguration.ScrapeDirectories)
                                                 .SingleAsync();
+            StateHasChanged();
         }
-        finally
-        {
-            Loading = false;
-        }
-
-        await base.OnInitializedAsync();
     }
 
     private async Task HandleValidSubmit()
