@@ -1,4 +1,5 @@
 ﻿@page "/weather"
+
 @attribute [StreamRendering]
 
 <PageTitle>Weather</PageTitle>
@@ -7,58 +8,43 @@
 
 <p>This component demonstrates showing data.</p>
 
-@if (forecasts == null)
+@if(CategoriesList == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-
-@code {
-    private WeatherForecast[]? forecasts;
-
-    protected override async Task OnInitializedAsync()
-    {
-        // Simulate asynchronous loading to demonstrate streaming rendering
-        await Task.Delay(500);
-
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = startDate.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = summaries[Random.Shared.Next(summaries.Length)]
-        }).ToArray();
-    }
-
-    private class WeatherForecast
-    {
-        public DateOnly Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string? Summary { get; set; }
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-    }
+    <EditForm Model="@CategoriesList" OnSubmit="@HandleValidSubmit" FormName="Categories">
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary col-10">Update</button>
+        </div>
+        <DataAnnotationsValidator />
+        <div class="container mt-5">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td colspan="2"><h2>Categories</h2></td>
+                    </tr>
+                    @foreach(var category in CategoriesList)
+                    {
+                        <tr>
+                            <th class="col-2"><label for="Id">Id: </label></th>
+                            <td class="col-5"><InputText id="Id" @bind-Value="@category.Id"></InputText></td>
+                            <th class="col-2"><label for="Name">Name: </label></th>
+                            <td class="col-5"><InputText id="Name" @bind-Value="@category.Name"></InputText></td>
+                            <th class="col-2"><label for="LastKnownImageCount">Last Image Count: </label></th>
+                            <td class="col-5"><InputNumber id="LastKnownImageCount" @bind-Value="@category.LastKnownImageCount"></InputNumber></td>
+                            <th class="col-2"><label for="LastPageVisited">Last Page Visited: </label></th>
+                            <td class="col-5"><InputNumber id="LastPageVisited" @bind-Value="@category.LastPageVisited" width="50"></InputNumber></td>
+                            <th class="col-2"><label for="TotalPages">Total Pages: </label></th>
+                            <td class="col-5"><InputNumber id="TotalPages" @bind-Value="@category.TotalPages"></InputNumber></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary col-10" @onclick="@HandleValidSubmit">Update</button>
+        </div>
+    </EditForm>
 }

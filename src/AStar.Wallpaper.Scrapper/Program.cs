@@ -11,7 +11,6 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
         _ = builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
         _ = builder.CreateBootstrapLogger("astar-logging-settings.json")

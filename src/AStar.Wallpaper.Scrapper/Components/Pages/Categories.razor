@@ -1,25 +1,50 @@
 ﻿@page "/categories"
 
+@attribute [StreamRendering]
+
 <h3>Categories</h3>
 
-<EditForm Model="@CategoriesList" OnSubmit="@HandleValidSubmit" FormName="Categories">
-    <div class="container mt-5">
-        <table class="table table-striped">
-            <tbody>
-                <tr>
-                    <td colspan="2"><h2>Categories</h2></td>
-                </tr>
-@foreach(var category in CategoriesList)
-                {
+@if(CategoriesList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@CategoriesList" OnSubmit="@HandleValidSubmit" FormName="Categories">
+        <DataAnnotationsValidator />
+        <div class="container mt-5">
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary col-12">Update</button>
+            </div>
+            <table class="table table-striped">
+                <tbody>
                     <tr>
-                        <th class="col-2"><label for="Name">Name: </label></th>
-                        <td class="col-5"><InputText id="Name" @bind-Value="@category.Name"></InputText></td>
+                        <th colspan="6"><h2>Categories</h2></th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary" @onclick="@HandleValidSubmit">Update</button>
-    </div>
-</EditForm>
+                    <tr>
+                        <th>Order</th>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Last Image Count</th>
+                        <th>Last Page Visited</th>
+                        <th>Total Pages</th>
+                    </tr>
+                    @foreach(var category in CategoriesList)
+                    {
+                        <tr>
+                            <td><InputNumber id="Order" @bind-Value="@category.Order" style="width:50px"></InputNumber></td>
+                            <td><InputText id="Id" @bind-Value="@category.Id"></InputText></td>
+                            <td><InputText id="Name" @bind-Value="@category.Name"></InputText></td>
+                            <td><InputNumber id="LastKnownImageCount" @bind-Value="@category.LastKnownImageCount" style="width:50px"></InputNumber></td>
+                            <td><InputNumber id="LastPageVisited" @bind-Value="@category.LastPageVisited" style="width:50px"></InputNumber></td>
+                            <td><InputNumber id="TotalPages" @bind-Value="@category.TotalPages" style="width:50px"></InputNumber></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary col-12" @onclick="@HandleValidSubmit">Update</button>
+            </div>
+        </div>
+    </EditForm>
+}

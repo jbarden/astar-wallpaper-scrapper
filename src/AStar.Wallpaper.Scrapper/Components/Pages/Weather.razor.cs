@@ -5,16 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AStar.Wallpaper.Scrapper.Components.Pages;
 
-public partial class Categories
+public partial class Weather
 {
     private IList<SearchCategory>? CategoriesList { get; set; }
-
     [Inject]
     public required FilesContext Context { get; set; }
-
-    private bool Loading { get; set; } = true;
-
-    private void HandleValidSubmit() => Context.SaveChanges();
 
     protected override async Task OnInitializedAsync()
     {
@@ -24,6 +19,16 @@ public partial class Categories
         var scrapeConfiguration =  Context.ScrapeConfiguration.Include(scrapeConfiguration => scrapeConfiguration.UserConfiguration)
             .Include(scrapeConfiguration => scrapeConfiguration.SearchConfiguration).Include(c => c.SearchConfiguration.SearchCategories).First();
 
-        CategoriesList = [.. scrapeConfiguration.SearchConfiguration.SearchCategories.OrderBy(sc=>sc.Order)];
+        CategoriesList = scrapeConfiguration.SearchConfiguration.SearchCategories;
+    }
+
+    private void HandleValidSubmit() => Context.SaveChanges();
+
+    private class WeatherForecast
+    {
+        public DateOnly Date { get; set; }
+        public int TemperatureC { get; set; }
+        public string? Summary { get; set; }
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
     }
 }
