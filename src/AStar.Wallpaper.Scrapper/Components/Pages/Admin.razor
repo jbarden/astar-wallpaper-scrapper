@@ -1,0 +1,125 @@
+﻿@page "/admin"
+@rendermode InteractiveServer
+
+<PageTitle>Admin</PageTitle>
+
+<h1>Admin</h1>
+@if(ScrapeConfiguration == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@ScrapeConfiguration" OnSubmit="@HandleValidSubmit">
+        @if(!string.IsNullOrWhiteSpace(UpdateMessage))
+        {
+            <h2 class="btn btn-success"> @UpdateMessage</h2>
+        }
+        <DataAnnotationsValidator />
+        <div class="form-group d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary col-10">Update</button>
+        </div>
+        <div class="container mt-5">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td colspan="2"><h2>User Configuration</h2></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="Username">Username: </label></th>
+                        <td class="col-5"><InputText id="Username" @bind-Value="@ScrapeConfiguration.UserConfiguration.Username"></InputText></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="Password">Password: </label></th>
+                        <td class="col-5"><InputText id="Password" @bind-Value="@ScrapeConfiguration.UserConfiguration.Password"></InputText></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="LoginEmailAddress">Email Address: </label></th>
+                        <td class="col-5"><InputText id="LoginEmailAddress" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.UserConfiguration.LoginEmailAddress"></InputText></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><h2>Search Configuration</h2></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="BaseUrl">Base Url: </label></th>
+                        <td class="col-5"><InputText id="BaseUrl" @bind-Value="@ScrapeConfiguration.SearchConfiguration.BaseUrl"></InputText></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="LoginUrl">Login Url: </label></th>
+                        <td class="col-5"><InputText id="LoginUrl" @bind-Value="@ScrapeConfiguration.SearchConfiguration.LoginUrl"></InputText></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="searchStringPrefix">Search String Prefix: </label></th>
+                        <td class="col-5"><InputText id="searchStringPrefix" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.SearchConfiguration.SearchStringPrefix"></InputText></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="searchStringSuffix">Search String Suffix: </label></th>
+                        <td class="col-5"><InputText id="searchStringSuffix" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.SearchConfiguration.SearchStringSuffix"></InputText></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="subscriptions">Subscriptions: </label></th>
+                        <td class="col-5"><InputText id="subscriptions" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.SearchConfiguration.Subscriptions"></InputText></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="imagePauseInSeconds">Image Pause In Seconds: </label></th>
+                        <td class="col-5"><InputNumber id="imagePauseInSeconds" class="form-control input-lg" style="width:50px" @bind-Value="@ScrapeConfiguration.SearchConfiguration.ImagePauseInSeconds"></InputNumber></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="startingPageNumber">Starting Page Number: </label></th>
+                        <td class="col-5"><InputNumber id="startingPageNumber" class="form-control input-lg" style="width:50px" @bind-Value="@ScrapeConfiguration.SearchConfiguration.StartingPageNumber"></InputNumber></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="totalPages">Total Pages: </label></th>
+                        <td class="col-5"><InputNumber id="totalPages" class="form-control input-lg" style="width:50px" @bind-Value="@ScrapeConfiguration.SearchConfiguration.TotalPages"></InputNumber></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="useHeadless">Use Headless: </label></th>
+                        <td class="col-5"><InputCheckbox id="useHeadless" @bind-Value="@ScrapeConfiguration.SearchConfiguration.UseHeadless"></InputCheckbox></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="SubscriptionsStartingPageNumber">Subscriptions Starting Page Number: </label></th>
+                        <td class="col-5"><InputNumber id="SubscriptionsStartingPageNumber" style="width:50px" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.SearchConfiguration.SubscriptionsStartingPageNumber"></InputNumber></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="SubscriptionsTotalPages">Subscriptions Total Pages: </label></th>
+                        <td class="col-5"><InputNumber id="SubscriptionsTotalPages" style="width:50px" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.SearchConfiguration.SubscriptionsTotalPages"></InputNumber></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="TopWallpapersTotalPages">Top Wallpapers Total Pages: </label></th>
+                        <td class="col-5"><InputNumber id="TopWallpapersTotalPages" style="width:50px" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.SearchConfiguration.TopWallpapersTotalPages"></InputNumber></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="TopWallpapersStartingPageNumber">Top Wallpapers Starting Page Number: </label></th>
+                        <td class="col-5"><InputNumber id="TopWallpapersStartingPageNumber" style="width:50px" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.SearchConfiguration.TopWallpapersStartingPageNumber"></InputNumber></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><h2>Scrape Directories</h2></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="RootDirectory">Root Directory: </label></th>
+                        <td class="col-5"><InputText id="RootDirectory" @bind-Value="@ScrapeConfiguration.ScrapeDirectories.RootDirectory"></InputText></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="BaseSaveDirectory">Base Save Directory: </label></th>
+                        <td class="col-5"><InputText id="BaseSaveDirectory" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.ScrapeDirectories.BaseSaveDirectory"></InputText></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="BaseDirectory">Base Directory: </label></th>
+                        <td class="col-5"><InputText id="BaseDirectory" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.ScrapeDirectories.BaseDirectory"></InputText></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="BaseDirectoryFamous">Base Directory Famous: </label></th>
+                        <td class="col-5"><InputText id="BaseDirectoryFamous" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.ScrapeDirectories.BaseDirectoryFamous"></InputText></td>
+                    </tr>
+                    <tr>
+                        <th class="col-2"><label for="SubDirectoryName">Sub-Directory Name: </label></th>
+                        <td class="col-5"><InputText id="SubDirectoryName" class="form-control input-lg" @bind-Value="@ScrapeConfiguration.ScrapeDirectories.SubDirectoryName"></InputText></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary col-10">Update</button>
+        </div>
+    </EditForm>
+}

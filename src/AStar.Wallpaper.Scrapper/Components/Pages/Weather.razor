@@ -1,0 +1,50 @@
+﻿@page "/weather"
+
+@attribute [StreamRendering]
+
+<PageTitle>Weather</PageTitle>
+
+<h1>Weather</h1>
+
+<p>This component demonstrates showing data.</p>
+
+@if(CategoriesList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="@CategoriesList" OnSubmit="@HandleValidSubmit" FormName="Categories">
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary col-10">Update</button>
+        </div>
+        <DataAnnotationsValidator />
+        <div class="container mt-5">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td colspan="2"><h2>Categories</h2></td>
+                    </tr>
+                    @foreach(var category in CategoriesList)
+                    {
+                        <tr>
+                            <th class="col-2"><label for="Id">Id: </label></th>
+                            <td class="col-5"><InputText id="Id" @bind-Value="@category.Id"></InputText></td>
+                            <th class="col-2"><label for="Name">Name: </label></th>
+                            <td class="col-5"><InputText id="Name" @bind-Value="@category.Name"></InputText></td>
+                            <th class="col-2"><label for="LastKnownImageCount">Last Image Count: </label></th>
+                            <td class="col-5"><InputNumber id="LastKnownImageCount" @bind-Value="@category.LastKnownImageCount"></InputNumber></td>
+                            <th class="col-2"><label for="LastPageVisited">Last Page Visited: </label></th>
+                            <td class="col-5"><InputNumber id="LastPageVisited" @bind-Value="@category.LastPageVisited" width="50"></InputNumber></td>
+                            <th class="col-2"><label for="TotalPages">Total Pages: </label></th>
+                            <td class="col-5"><InputNumber id="TotalPages" @bind-Value="@category.TotalPages"></InputNumber></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary col-10" @onclick="@HandleValidSubmit">Update</button>
+        </div>
+    </EditForm>
+}
